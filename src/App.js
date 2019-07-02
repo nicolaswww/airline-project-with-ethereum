@@ -36,6 +36,14 @@ export class App extends Component {
         });
     }
 
+    async buyFlight(flightIndex, flight) {
+        await this.airlineService.buyFlight(
+            flightIndex, 
+            this.state.account,
+            flight.price
+        );
+    }
+
     async getBalance() {
         let weiBalance = await this.web3.eth.getBalance(this.state.account);
         this.setState({
@@ -80,9 +88,9 @@ export class App extends Component {
                         { this.state.flights.map((flight, i) => {
                             return <div key={ i }>
                                         <span>{ flight.name } - cost: { this.toEther(flight.price) }</span>
+                                        <button className="btn btn-success" onClick={ () => this.buyFlight(i, flight) }>Purchase</button>
                                     </div>
                         }) }
-
                     </Panel>
                 </div>
                 <div className="col-sm">
