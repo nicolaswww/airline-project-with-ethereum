@@ -30,11 +30,15 @@ export class App extends Component {
         
         const account = (await this.web3.eth.getAccounts())[0];
 
+        this.web3.currentProvider.publicConfigStore.on('update', async function(event) {
+            this.setState({
+                account: event.selectedAddress.toLowerCase()
+            }, () => this.load());
+        }.bind(this));
+
         this.setState({
             account: account.toLowerCase()
-        }, () => {
-            this.load();
-        });
+        }, () => this.load());
     }
 
     async buyFlight(flightIndex, flight) {
