@@ -22,7 +22,7 @@ export class AirlineService {
     async getCustomerFlights(account) {
         let customerTotalFlights = await this.contract.customerTotalFlights(account);
         let flights = [];
-        
+
         for(let i = 0; i < customerTotalFlights.toNumber(); i ++) {
             let flight = await this.contract.customerFlights(account, i);
             flights.push(flight);
@@ -33,6 +33,14 @@ export class AirlineService {
 
     async getTotalFlights() {
         return (await this.contract.totalFlights()).toNumber();
+    }
+
+    getRefundableEther(from) {
+        return this.contract.getRefundableEther({ from });
+    }
+
+    redeemLoyaltyPoints(from) {
+        return this.contract.redeemLoyaltyPoints({ from });
     }
 
     mapFlights(flights) {
