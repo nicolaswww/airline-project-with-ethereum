@@ -55,6 +55,10 @@ contract Airline {
         customer.loyaltyPoints = 0;
     }
 
+    function getRefundableEther() public view returns (uint) {
+        return etherPerPoint * customers[msg.sender].loyaltyPoints;
+    }
+
     function getAirlineBalance() public view returns (uint) {
         address airlineAddress = this;
         return airlineAddress.balance;
