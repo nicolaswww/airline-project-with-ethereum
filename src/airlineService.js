@@ -16,7 +16,7 @@ export class AirlineService {
     }
 
     async getTotalFlights() {
-        return await (this.contract.totalFlights()).toNumber();
+        return (await this.contract.totalFlights()).toNumber();
     }
 
     mapFlights(flights) {

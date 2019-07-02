@@ -16,7 +16,8 @@ export class App extends Component {
         super(props);
         this.state = {
             account: undefined,
-            balance: 0
+            balance: 0,
+            flights: []
         };
     }
 
@@ -42,8 +43,16 @@ export class App extends Component {
         });
     }
 
+    async getFlights() {
+        let flights = await this.airlineService.getFlights();
+        this.setState({
+            flights
+        });
+    }
+
     async load() {
         this.getBalance();
+        this.getFlights();
     }
 
     render() {
@@ -68,7 +77,11 @@ export class App extends Component {
             <div className="row">
                 <div className="col-sm">
                     <Panel title="Available flights">
-
+                        { this.state.flights.map((flight, i) => {
+                            return <div key={ i }>
+                                        <span>{ flight.name } - cost: { this.toEther(flight.price) }</span>
+                                    </div>
+                        }) }
 
                     </Panel>
                 </div>
