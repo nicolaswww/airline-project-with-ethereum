@@ -54,4 +54,14 @@ contract Airline {
         msg.sender.transfer(etherToRefund);
         customer.loyaltyPoints = 0;
     }
+
+    function getAirlineBalance() public view returns (uint) {
+        address airlineAddress = this;
+        return airlineAddress.balance;
+    }
+
+    modifier isOwner() {
+        require(msg.sender == owner, 'User is not owner');
+        _;
+    }
 }
