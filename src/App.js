@@ -3,6 +3,7 @@ import Panel from "./Panel";
 import getWeb3 from './getWeb3';
 import AirlineContract from './airline';
 import { AirlineService } from './airlineService';
+import { ToastContainer } from 'react-toastr';
 
 const converter = (web3) => {
     return (value) => {
@@ -28,6 +29,19 @@ export class App extends Component {
         this.toEther = converter(this.web3);
         this.airline = await AirlineContract(this.web3.currentProvider);
         this.airlineService = new AirlineService(this.airline);
+
+        let flightPurchased = this.airline.FlightPurchased();
+        flightPurchased.watch(function(err, result) {
+
+            const { customer, price, flight } = result.args;
+            console.log('result', result.args)
+            if(customer == this.state.account) {
+                console.log(`You purchased a flight: ${ flight } with a cost of ${ price }`)
+            } else {
+                this.container.success(`Last customer purchased a flight to ${ flight } with a cost of ${ price }`)
+            }
+
+        }.bind(this));
         
         const account = (await this.web3.eth.getAccounts())[0];
 
@@ -131,6 +145,9 @@ export class App extends Component {
                     </Panel>
                 </div>
             </div>
+            <ToastContainer ref={ (input) => this.container = input } 
+                    className="toast-top-right">
+            </ToastContainer>
         </React.Fragment>
     }
 }
